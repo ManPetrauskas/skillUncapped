@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SkillUncapped</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #040308;
+      --card: rgba(14, 15, 24, 0.9);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f5f5f7;
+      --muted: #b7b7c9;
+      --accent: #ff62f6;
+      --accent-2: #8c6cff;
+    }
+  
+    * {
+      box-sizing: border-box;
+    }
+  
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top, rgba(255, 98, 246, 0.18), transparent 55%) center/cover, var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+  
+    .app {
+      width: min(960px, 94vw);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 36px 40px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.5);
+    }
+  
+    .app::before,
+    .app::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(255, 98, 246, 0.35), transparent 70%);
+      top: -120px;
+      right: -80px;
+      filter: blur(8px);
+      opacity: 0.8;
+      z-index: 0;
+    }
+  
+    .app::after {
+      background: radial-gradient(circle, rgba(140, 108, 255, 0.4), transparent 70%);
+      bottom: -120px;
+      left: -80px;
+      top: auto;
+    }
+  
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+  
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  
+    .header h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+  
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+  
+    .input-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  
+    .input-field label {
+      font-size: 0.9rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+  
+    .input-field input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-size: 1rem;
+      color: var(--text);
+      transition: border 0.25s ease, box-shadow 0.25s ease;
+    }
+  
+    .input-field input:focus {
+      outline: none;
+      border-color: rgba(255, 98, 246, 0.65);
+      box-shadow: 0 0 0 6px rgba(255, 98, 246, 0.08);
+    }
+  
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+  
+    button {
+      flex: 1 1 140px;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #050505;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 10px 30px rgba(255, 98, 246, 0.25);
+    }
+  
+    button.secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: none;
+    }
+  
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.95;
+      box-shadow: 0 18px 40px rgba(255, 98, 246, 0.3);
+    }
+  
+    button:active {
+      transform: translateY(0);
+      opacity: 0.85;
+    }
+  
+    #status {
+      min-height: 24px;
+      font-size: 0.95rem;
+      color: #f3cfff;
+      letter-spacing: 0.02em;
+    }
+  
+    .video-shell {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+  
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  
+    @media (max-width: 640px) {
+      .app {
+        padding: 28px 24px;
+      }
+  
+      .actions {
+        flex-direction: column;
+      }
+  
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="content">
+      <div class="header">
+        <h1>SkillUncapped Capture</h1>
+        <p>Stream or download multi-part sessions with a single paste.</p>
+      </div>
+      <div class="input-grid">
+        <div class="input-field">
+          <label for="url">Video URL</label>
+          <input onkeyup="if (event.key =='Enter') stream()" id="url" placeholder="https://skillcapped.com/..." />
+        </div>
+        <div class="input-field">
+          <label for="fileNameInput">File Name</label>
+          <input id="fileNameInput" placeholder="my-session" />
+        </div>
+      </div>
+      <div class="actions">
+        <button onclick="stream()">Stream</button>
+        <button class="secondary" onclick="downloadVideo()">Download</button>
+      </div>
+      <label id="status"></label>
+      <div class="video-shell">
+        <video height="720" width="1280" id="video" controls autoplay crossorigin="anonymous"></video>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.8/hls.min.js"></script>
+<script>
+  var hls = null;
+  const statusLabel = document.getElementById("status");
+
+  if (Hls.isSupported()) {
+    var hlsjsConfig = {
+      "maxBufferSize": 0,
+      "maxBufferLength": 30,
+      "startPosition": 0
+    }
+    hls = new Hls(hlsjsConfig);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.play();
+    });
+  }
+
+  const rgx = /([a-z0-9]{10})(:?\/|$)/g;
+
+  function getVideoIdFromUrl(rawUrl) {
+    if (!rawUrl) {
+      throw new Error("Please enter a URL");
+    }
+    rgx.lastIndex = 0;
+    const ids = [];
+    let match = null;
+    while ((match = rgx.exec(rawUrl)) !== null) {
+      ids.push(match[1]);
+    }
+    if (ids.length < 1) {
+      throw new Error("Invalid URL");
+    }
+    if (rawUrl.includes("browse/course")) {
+      rawUrl = rawUrl.slice(0, rawUrl.lastIndexOf("/"));
+      return ids[ids.length - 2];
+    }
+    return rawUrl.includes("browse3") ? ids[0] : ids[ids.length - 1];
+  }
+
+  async function locateLastSegment(videoId, updateStatus) {
+    let last = 0;
+    let jump = true;
+    for (let i = 300; i <= 1000; i++) {
+      if (i === 1000) {
+        throw new Error("Unable to find the final segment (hit search limit).");
+      }
+      if (i === 0) i = 1;
+      const url = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`;
+      console.log(`testing ${url}`);
+      updateStatus(`Looking for final part ; Testing ${i}...`);
+      try {
+        const resp = await fetch(url, { method: "HEAD" });
+        if (resp.status === 403) {
+          if (i >= 50 && i % 50 === 0 && jump) {
+            last = i;
+            jump = true;
+            i -= 51;
+            continue;
+          }
+          break;
+        }
+        last = i;
+        jump = false;
+      } catch (e) {
+        throw new Error("Fetch failed. Ensure a Cross-Origin disabler extension is active or check connectivity.");
+      }
+    }
+    return last;
+  }
+
+  async function locateSegmentBounds(videoId, updateStatus) {
+    const last = await locateLastSegment(videoId, updateStatus);
+    let first = 0;
+    let found = false;
+    for (let i = 0; i <= last; i++) {
+      const url = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`;
+      updateStatus(`Verifying first part ; Testing ${i}...`);
+      try {
+        const resp = await fetch(url, { method: "HEAD" });
+        if (resp.ok) {
+          first = i;
+          found = true;
+          break;
+        }
+      } catch (e) {
+        throw new Error("Fetch failed. Ensure a Cross-Origin disabler extension is active or check connectivity.");
+      }
+    }
+    if (!found) {
+      throw new Error("Unable to locate the first segment.");
+    }
+    return { first, last };
+  }
+
+  async function fetchAndMergeSegments(videoId, first, last, onProgress) {
+    const parts = [];
+    const totalParts = last - first + 1;
+    for (let i = first; i <= last; i++) {
+      const segmentUrl = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`;
+      onProgress(`Downloading part ${i - first + 1} of ${totalParts}`);
+      const response = await fetch(segmentUrl);
+      if (!response.ok) {
+        throw new Error(`Failed downloading part ${i}. Status: ${response.status}`);
+      }
+      parts.push(await response.arrayBuffer());
+    }
+    onProgress("Merging segments...");
+    return new Blob(parts, { type: "video/mp2t" });
+  }
+
+  async function stream() {
+    if (hls == null) {
+      alert("hls not supported, please use a modern browser such as Chrome");
+      return;
+    }
+    let rawUrl = document.getElementById("url").value;
+    let videoId;
+    try {
+      videoId = getVideoIdFromUrl(rawUrl);
+    } catch (err) {
+      alert(err.message);
+      return;
+    }
+    console.log(`video id is ${videoId}`);
+    console.log("looking for final part...");
+    let bounds;
+    try {
+      bounds = await locateSegmentBounds(videoId, (msg) => statusLabel.innerText = msg);
+    } catch (err) {
+      alert(err.message);
+      return;
+    }
+    const { first, last } = bounds;
+    statusLabel.innerText = "";
+    const playlistLines = [
+      "#EXTM3U",
+      "#EXT-X-VERSION:3",
+      "#EXT-X-PLAYLIST-TYPE:VOD",
+      "#EXT-X-TARGETDURATION:10",
+      `#EXT-X-MEDIA-SEQUENCE:${first}`
+    ];
+
+    for (let i = first; i <= last; i++) {
+      playlistLines.push(`#EXTINF:10,`);
+      playlistLines.push(`https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`);
+    }
+    playlistLines.push("#EXT-X-ENDLIST");
+
+    const playlist = playlistLines.join("\n");
+    console.log(playlist);
+    hls.loadSource(
+      "data:application/x-mpegURL;base64," + btoa(playlist)
+    );
+    hls.attachMedia(video);
+  }
+
+  async function downloadVideo() {
+    let rawUrl = document.getElementById("url").value;
+    let enteredFileName = document.getElementById("fileNameInput").value.trim();
+    let videoId;
+    try {
+      videoId = getVideoIdFromUrl(rawUrl);
+    } catch (err) {
+      alert(err.message);
+      return;
+    }
+
+    console.log(`Video ID is ${videoId}`);
+    let bounds;
+    try {
+      bounds = await locateSegmentBounds(videoId, (msg) => statusLabel.innerText = msg);
+    } catch (err) {
+      alert(err.message);
+      return;
+    }
+    const { first, last } = bounds;
+    const totalParts = last - first + 1;
+    statusLabel.innerText = `Total parts to download: ${totalParts}`;
+
+    try {
+      const tsBlob = await fetchAndMergeSegments(videoId, first, last, (msg) => statusLabel.innerText = msg);
+      const blobUrl = window.URL.createObjectURL(tsBlob);
+      const downloadLink = document.createElement("a");
+      downloadLink.href = blobUrl;
+      downloadLink.download = `${enteredFileName || videoId}.ts`;
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      window.URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(downloadLink);
+      statusLabel.innerText = "Download complete";
+    } catch (error) {
+      console.error(error);
+      alert(error.message || "Failed to download the video.");
+    }
+  }
+
+</script>
+
+
+
+</body>
+
+</html>
